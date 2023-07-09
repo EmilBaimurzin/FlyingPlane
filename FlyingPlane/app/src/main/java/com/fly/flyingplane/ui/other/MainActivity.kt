@@ -18,6 +18,8 @@ class MainActivity : AppCompatActivity(), MusicController {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        mediaPlayer = MediaPlayer.create(this, R.raw.bg_music)
+        mediaPlayer.isLooping = true
 
         if (savedInstanceState != null) {
             currentSec = savedInstanceState.getInt("SEC")
@@ -41,8 +43,6 @@ class MainActivity : AppCompatActivity(), MusicController {
 
     override fun startMusic() {
         if (sharedPrefs.getBoolean("MUSIC", true)) {
-            mediaPlayer = MediaPlayer.create(this, R.raw.bg_music)
-            mediaPlayer.isLooping = true
             mediaPlayer.setVolume(50f, 50f)
             mediaPlayer.seekTo(currentSec)
             mediaPlayer.start()
@@ -50,8 +50,12 @@ class MainActivity : AppCompatActivity(), MusicController {
     }
 
     override fun pauseMusic() {
-        currentSec = mediaPlayer.currentPosition
-        mediaPlayer.pause()
+        try {
+            currentSec = mediaPlayer.currentPosition
+            mediaPlayer.pause()
+        } catch (_:Throwable) {
+
+        }
     }
 
     override fun onDestroy() {

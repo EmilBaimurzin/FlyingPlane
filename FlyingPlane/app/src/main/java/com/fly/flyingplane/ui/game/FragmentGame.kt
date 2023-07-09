@@ -9,12 +9,14 @@ import android.media.MediaPlayer
 import android.media.SoundPool
 import android.os.Bundle
 import android.util.DisplayMetrics
+import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewTreeObserver
 import android.widget.ImageView
 import android.widget.LinearLayout
 import androidx.core.content.res.ResourcesCompat
+import androidx.core.view.contains
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -47,7 +49,7 @@ class FragmentGame : ViewBindingFragment<FragmentGameBinding>(FragmentGameBindin
         display.getSize(size)
         Pair(size.x, size.y)
     }
-    private val gameScope = CoroutineScope(Dispatchers.Main)
+    private lateinit var gameScope: CoroutineScope
     private val scopeList = mutableListOf<CoroutineScope>()
     private val enemyList = mutableListOf<View>()
 
@@ -55,17 +57,6 @@ class FragmentGame : ViewBindingFragment<FragmentGameBinding>(FragmentGameBindin
         super.onViewCreated(view, savedInstanceState)
         initViewModel()
         setupPlayerView()
-        if (viewModel.gameState) {
-            generatePlayerAttack()
-            generateEnemies()
-            respawnEnemies()
-            generateEnemyAttack()
-            spawnSmallKit()
-            spawnBigKit()
-        } else {
-            binding.playerPlane.visibility = View.GONE
-            gameScope.cancel()
-        }
         soundMap.put(1, soundPool.load(requireContext(), R.raw.shot, 1))
         soundMap.put(2, soundPool.load(requireContext(), R.raw.damage, 2))
         soundMap.put(3, soundPool.load(requireContext(), R.raw.explosion, 2))
@@ -177,7 +168,9 @@ class FragmentGame : ViewBindingFragment<FragmentGameBinding>(FragmentGameBindin
                             repeatScope.cancel()
                             try {
                                 enemyList.removeAll { it == enemyView }
-                                binding.gameLayout.removeView(enemyView)
+                                if (binding.gameLayout.contains(enemyView)) {
+                                    binding.gameLayout.removeView(enemyView)
+                                }
                                 viewModel.removeEnemy(enemyIndex)
                             } catch (_: Throwable) {
                             }
@@ -214,7 +207,9 @@ class FragmentGame : ViewBindingFragment<FragmentGameBinding>(FragmentGameBindin
                     .y(xy.second.toFloat())
                     .withEndAction {
                         try {
-                            binding.gameLayout.removeView(kitView)
+                            if (binding.gameLayout.contains(kitView)) {
+                                binding.gameLayout.removeView(kitView)
+                            }
                         } catch (_: Throwable) {
                         }
                     }
@@ -240,7 +235,9 @@ class FragmentGame : ViewBindingFragment<FragmentGameBinding>(FragmentGameBindin
                     .y(xy.second.toFloat())
                     .withEndAction {
                         try {
-                            binding.gameLayout.removeView(kitView)
+                            if (binding.gameLayout.contains(kitView)) {
+                                binding.gameLayout.removeView(kitView)
+                            }
                         } catch (_: Throwable) {
                         }
                     }
@@ -263,7 +260,11 @@ class FragmentGame : ViewBindingFragment<FragmentGameBinding>(FragmentGameBindin
                     .y(viewModel.playerXY.value!!.second - xy.second)
                     .withEndAction {
                         gameScope.launch {
-                            binding.gameLayout.removeView(shotView)
+                            try {
+                                if (binding.gameLayout.contains(shotView)) {
+                                    binding.gameLayout.removeView(shotView)
+                                }
+                            } catch (_:Throwable) {}
                         }
                     }
                 soundShot()
@@ -287,9 +288,11 @@ class FragmentGame : ViewBindingFragment<FragmentGameBinding>(FragmentGameBindin
                         .setDuration(1000)
                         .y(enemyPosition.second + xy.second)
                         .withEndAction {
-                            gameScope.launch {
-                                binding.gameLayout.removeView(shotView)
-                            }
+                            try {
+                                if (binding.gameLayout.contains(shotView)) {
+                                    binding.gameLayout.removeView(shotView)
+                                }
+                            } catch (_:Throwable) {}
                         }
                 }
                 delay(500)
@@ -336,7 +339,9 @@ class FragmentGame : ViewBindingFragment<FragmentGameBinding>(FragmentGameBindin
                         view.getGlobalVisibleRect(rect2)
                         val isIntersecting = rect1.intersect(rect2)
                         if (isIntersecting) {
-                            binding.gameLayout.removeView(view)
+                            if (binding.gameLayout.contains(view)) {
+                                binding.gameLayout.removeView(view)
+                            }
                             soundHeal()
                             if (isBig) {
                                 viewModel.useBigHealth()
@@ -375,7 +380,9 @@ class FragmentGame : ViewBindingFragment<FragmentGameBinding>(FragmentGameBindin
                                 }
                                 scopeList[index].cancel()
                                 scopeList.removeAll { it == scopeList[index] }
-                                binding.gameLayout.removeView(enemyView)
+                                if (binding.gameLayout.contains(enemyView)) {
+                                    binding.gameLayout.removeView(enemyView)
+                                }
                                 enemyList.removeAll { it == enemyView }
                                 viewModel.removeEnemy(index)
                                 viewTreeObserver.removeOnPreDrawListener(this)
@@ -445,7 +452,9 @@ class FragmentGame : ViewBindingFragment<FragmentGameBinding>(FragmentGameBindin
             binding.gameLayout.addView(explosionView)
             explosionView.playAnimation()
             delay(700)
-            binding.gameLayout.removeView(explosionView)
+            if (binding.gameLayout.contains(explosionView)) {
+                binding.gameLayout.removeView(explosionView)
+            }
         }
     }
 
@@ -473,8 +482,26 @@ class FragmentGame : ViewBindingFragment<FragmentGameBinding>(FragmentGameBindin
         return (dp * (displayMetrics.xdpi / DisplayMetrics.DENSITY_DEFAULT)).roundToInt()
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
+    override fun onResume() {
+        super.onResume()
+        gameScope = CoroutineScope(Dispatchers.Main)
+        if (viewModel.gameState) {
+            Log.e("starr", "dd")
+            generatePlayerAttack()
+            generateEnemies()
+            respawnEnemies()
+            generateEnemyAttack()
+            spawnSmallKit()
+            spawnBigKit()
+        } else {
+            binding.playerPlane.visibility = View.GONE
+            gameScope.cancel()
+        }
+
+    }
+
+    override fun onPause() {
+        super.onPause()
         gameScope.cancel()
     }
 }
