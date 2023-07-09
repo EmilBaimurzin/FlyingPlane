@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">FlyingPlane</string>
+    <string name="start">GO</string>
+    <string name="score">SCORE</string>
+    <string name="new_best_score">NEW BEST SCORE</string>
+    <string name="plane_crashed">PLANE CRASHED</string>
+    <string name="would_you_like_to_play_again">WOULD YOU LIKE \n TO PLAY AGAIN?</string>
+    <string name="exit">EXIT</string>
+    <string name="best">BEST</string>
+    <string name="back">Back</string>
+    <string name="settings">SETTINGS</string>
+</resources>

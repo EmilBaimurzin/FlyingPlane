@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:background="@drawable/bg_menu"
+    android:layout_height="match_parent">
+
+    <com.fly.flyingplane.core.CustomButton
+        android:id="@+id/btnStart"
+        style="@style/BasicText"
+        android:layout_width="240dp"
+        android:layout_height="70dp"
+        android:background="@drawable/bg_button"
+        android:text="@string/start"
+        android:layout_marginBottom="12dp"
+        android:textSize="29sp"
+        app:layout_constraintBottom_toTopOf="@+id/settingsButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <com.fly.flyingplane.core.CustomButton
+        android:id="@+id/exitButton"
+        style="@style/BasicText"
+        android:layout_width="240dp"
+        android:layout_height="70dp"
+        android:background="@drawable/bg_button"
+        android:text="@string/exit"
+        android:layout_marginTop="12dp"
+        android:textSize="29sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/settingsButton" />
+
+    <com.fly.flyingplane.core.CustomButton
+        android:id="@+id/settingsButton"
+        style="@style/BasicText"
+        android:layout_width="240dp"
+        android:layout_height="70dp"
+        android:background="@drawable/bg_button"
+        android:text="@string/settings"
+        android:textSize="29sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

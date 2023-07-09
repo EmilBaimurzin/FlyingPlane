@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/navigation"
+    app:startDestination="@id/fragmentMenu">
+
+    <fragment
+        android:id="@+id/fragmentMenu"
+        android:name="com.fly.flyingplane.ui.menu.FragmentMenu"
+        android:label="FragmentMenu" >
+        <action
+            android:id="@+id/action_fragmentMenu_to_fragmentGame"
+            app:destination="@id/fragmentGame" />
+        <action
+            android:id="@+id/action_fragmentMenu_to_fragmentSettings"
+            app:destination="@id/fragmentSettings" />
+    </fragment>
+    <fragment
+        android:id="@+id/fragmentGame"
+        android:name="com.fly.flyingplane.ui.game.FragmentGame"
+        android:label="FragmentGame" >
+        <action
+            android:id="@+id/action_fragmentGame_to_dialogScores"
+            app:destination="@id/dialogScores" />
+    </fragment>
+    <dialog
+        android:id="@+id/dialogScores"
+        android:name="com.fly.flyingplane.ui.dialogs.DialogScores"
+        android:label="DialogScores" >
+        <argument
+            android:name="isRecord"
+            app:argType="boolean" />
+        <argument
+            android:name="scores"
+            app:argType="long" />
+    </dialog>
+    <fragment
+        android:id="@+id/fragmentSettings"
+        android:name="com.fly.flyingplane.ui.settings.FragmentSettings"
+        android:label="FragmentSettings" />
+</navigation>

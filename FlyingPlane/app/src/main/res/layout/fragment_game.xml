@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@drawable/bg_game"
+    android:layout_height="match_parent">
+
+    <FrameLayout
+        android:id="@+id/gameLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+    </FrameLayout>
+
+    <ImageView
+        android:id="@+id/playerPlane"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:src="@drawable/img_player_plane" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <com.fly.flyingplane.core.CustomImageButton
+            android:id="@+id/menuButton"
+            android:layout_width="70dp"
+            android:layout_height="50dp"
+            android:layout_margin="12dp"
+            android:src="@drawable/img_menu_button"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:textStyle="bold"
+            android:id="@+id/textView"
+            style="@style/BasicText"
+            android:layout_width="120dp"
+            android:layout_height="30dp"
+            app:autoSizeTextType="uniform"
+            android:text="@string/score"
+            android:textColor="@color/black"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cardView"
+            android:layout_width="120dp"
+            android:layout_height="35dp"
+            android:backgroundTint="#ACBBE4"
+            app:cardCornerRadius="6dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView" >
+
+            <TextView
+                android:id="@+id/scoresTextView"
+                style="@style/BasicText"
+                android:paddingVertical="4dp"
+                app:autoSizeTextType="uniform"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                tools:text="340"/>
+
+        </androidx.cardview.widget.CardView>
+
+        <LinearLayout
+            android:id="@+id/healthLayout"
+            android:layout_marginEnd="12dp"
+            android:layout_width="120dp"
+            android:paddingStart="30dp"
+            android:orientation="horizontal"
+            android:layout_height="30dp"
+            android:background="@drawable/bg_health"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" >
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="4dp"
+            android:layout_marginTop="6dp"
+            android:background="#ACBBE4"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/cardView" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</FrameLayout>
